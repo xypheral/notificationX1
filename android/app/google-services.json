@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "569903739616",
+    "project_id": "notificationx1-4fbaa",
+    "storage_bucket": "notificationx1-4fbaa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569903739616:android:e4f3b92909fba037a51685",
+        "android_client_info": {
+          "package_name": "com.xyph.notificationX1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRsUiYwV57C6-TT-mY8FA5Ahv-GMniNxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
