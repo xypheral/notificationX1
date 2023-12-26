@@ -1,11 +1,18 @@
 import '@react-native-firebase/messaging'; 
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import {getFcmToken, registerListenerWithFCM} from './src/utils/fcmHelper';
+import Clipboard from '@react-native-community/clipboard';
 
 export default function App() {
   const [token, setToken] = useState<string | null>(null);
+
+  const copyToClipboard = () => {
+    if (token) {
+      Clipboard.setString(token);
+    }
+  };
 
   useEffect(() => {
     getFcmToken();
@@ -24,6 +31,7 @@ export default function App() {
     <View style={styles.container}>
       <Text>Hellooooo</Text>
       <Text>FCM Token: {token}</Text>
+      <Button title="Copy Token" onPress={copyToClipboard} />
       <StatusBar style="auto" />
     </View>
   );

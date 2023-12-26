@@ -1,6 +1,7 @@
 import notifee, {EventType} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import {PERMISSIONS, request} from 'react-native-permissions';
+
 //method was called to get FCM tiken for notification
 export const getFcmToken = async () => {
   let token = null;
@@ -15,7 +16,7 @@ export const getFcmToken = async () => {
   return token;
 };
 
-//method was called on  user register with firebase FCM for notification
+//method was called on user register with firebase FCM for notification
 export async function registerAppWithFCM() {
   console.log(
     'registerAppWithFCM status',
@@ -147,6 +148,9 @@ async function onDisplayNotification(title, body, data) {
     title: title,
     body: body,
     data: data,
+    ios: {
+        sound: 'default',
+      },
     android: {
       channelId,
       // pressAction is needed if you want the notification to open the app when pressed
