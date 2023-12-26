@@ -19,6 +19,10 @@ buildscript {
     dependencies {
         classpath('com.android.tools.build:gradle:7.4.2')
         classpath('com.facebook.react:react-native-gradle-plugin')
+
+
+        // THIS LINER COMMENTED OUT TO FIX BUILD ERROR
+        // classpath('com.google.gms:google-services:4.3.10')
     }
 }
 
@@ -31,6 +35,10 @@ allprojects {
         maven {
             // Android JSC is installed from npm
             url(new File(['node', '--print', "require.resolve('jsc-android/package.json')"].execute(null, rootDir).text.trim(), '../dist'))
+        }
+        maven {
+            url "$rootDir/../node_modules/@notifee/react-native/android/libs" 
+
         }
 
         google()
