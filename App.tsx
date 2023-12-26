@@ -1,37 +1,29 @@
+import '@react-native-firebase/messaging'; 
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import messaging from '@react-native-firebase/messaging';
-import React, { useEffect } from 'react';
-export default function App() {
+import React, { useEffect, useState } from 'react';
+import {getFcmToken, registerListenerWithFCM} from './src/utils/fcmHelper';
 
-  const requestUserPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
-    if (enabled) {
-      console.log("Authorization status:", authStatus);
-    }
-  
-    return enabled; // Return the result
-  };
-  
+export default function App() {
+  const [token, setToken] = useState<string | null>(null);
+
   useEffect(() => {
-    const checkPermission = async () => {
-      const permission = await requestUserPermission();
-      if (permission) {
-        messaging()
-          .getToken()
-          .then(token => console.log(token));
-      }
-    };
-    checkPermission();
+    getFcmToken();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = registerListenerWithFCM();
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    getFcmToken().then(setToken);
   }, []);
   
   return (
     <View style={styles.container}>
-      <Text>Hello</Text>
+      <Text>Hellooooo</Text>
+      <Text>FCM Token: {token}</Text>
       <StatusBar style="auto" />
     </View>
   );
