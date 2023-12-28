@@ -29,7 +29,7 @@ export default function App() {
   
   return (
     <View style={styles.container}>
-      <Text>Hellooooo</Text>
+      <Text>Hello!</Text>
       <Text>FCM Token: {token}</Text>
       <Button title="Copy Token" onPress={copyToClipboard} />
       <StatusBar style="auto" />

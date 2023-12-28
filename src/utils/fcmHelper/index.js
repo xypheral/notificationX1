@@ -28,7 +28,6 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
     remoteMessage?.notification?.title &&
     remoteMessage?.notification?.body
   ) {
-    // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
       id: 'default',
       name: 'Default Channel',
@@ -36,14 +35,12 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
       sound: 'default',
     });
 
-    // Display a notification
     await notifee.displayNotification({
       title: remoteMessage.notification.title,
       body: remoteMessage.notification.body,
       data: remoteMessage.data,
       android: {
         channelId,
-        // pressAction is needed if you want the notification to open the app when pressed
         pressAction: {
           id: 'default',
         },
@@ -52,7 +49,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   }
 });
 
-//method was called to get FCM tiken for notification
+
 export const getFcmToken = async () => {
   let token = null;
   await checkApplicationNotificationPermission();
@@ -66,7 +63,7 @@ export const getFcmToken = async () => {
   return token;
 };
 
-//method was called on user register with firebase FCM for notification
+// User register with firebase FCM for notification
 export async function registerAppWithFCM() {
   console.log(
     'registerAppWithFCM status',
@@ -84,7 +81,7 @@ export async function registerAppWithFCM() {
   }
 }
 
-//method was called on un register the user from firebase for stoping receiving notifications
+// Unregister the user from firebase to stop receiving notifications
 export async function unRegisterAppWithFCM() {
   console.log(
     'unRegisterAppWithFCM status',
@@ -126,7 +123,7 @@ export const checkApplicationNotificationPermission = async () => {
     });
 };
 
-//method was called to listener events from firebase for notification triger
+// listen events from firebase for notification trigger
 export function registerListenerWithFCM() {
   const unsubscribe = messaging().onMessage(async remoteMessage => {
     console.log('onMessage Received : ', JSON.stringify(remoteMessage));
@@ -181,7 +178,7 @@ export function registerListenerWithFCM() {
   return unsubscribe;
 }
 
-//method was called to display notification
+// Display notification
 async function onDisplayNotification(title, body, data) {
   console.log('onDisplayNotification: ', JSON.stringify(data));
 
@@ -192,10 +189,9 @@ async function onDisplayNotification(title, body, data) {
     id: 'default',
     name: 'Default Channel',
     importance: AndroidImportance.HIGH, // HIGH : Notification appears on-top, DEFAULT : Notification recieved, smallIcon appear in the top view, 
-    sound: 'default', // And this line if you want a sound
+    sound: 'default',
   });
 
-  // Display a notification
   await notifee.displayNotification({
     title: title,
     body: body,
@@ -205,7 +201,6 @@ async function onDisplayNotification(title, body, data) {
       },
     android: {
       channelId,
-      // pressAction is needed if you want the notification to open the app when pressed
       pressAction: {
         id: 'default',
       },
