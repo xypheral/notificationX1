@@ -1,6 +1,56 @@
-import notifee, {EventType} from '@notifee/react-native';
+import notifee, { EventType, AndroidImportance } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import {PERMISSIONS, request} from 'react-native-permissions';
+
+notifee.onBackgroundEvent(async ({ type, detail }) => {
+  switch (type) {
+    case EventType.ACTION_PRESS:
+      console.log('User pressed action', detail.action);
+      break;
+    case EventType.DISMISSED:
+      console.log('User dismissed notification', detail.notification);
+      break;
+    case EventType.DELIVERED:
+      console.log('Notification delivered', detail.notification);
+      break;
+    case EventType.OPENED:
+      console.log('User opened notification', detail.notification);
+      break;
+    case EventType.RETRIGGER:
+      console.log('Notification retriggered', detail.notification);
+      break;
+  }
+});
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+  if (
+    remoteMessage?.notification?.title &&
+    remoteMessage?.notification?.body
+  ) {
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance: AndroidImportance.HIGH,
+      sound: 'default',
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: remoteMessage.notification.title,
+      body: remoteMessage.notification.body,
+      data: remoteMessage.data,
+      android: {
+        channelId,
+        // pressAction is needed if you want the notification to open the app when pressed
+        pressAction: {
+          id: 'default',
+        },
+      },
+    });
+  }
+});
 
 //method was called to get FCM tiken for notification
 export const getFcmToken = async () => {
@@ -141,6 +191,8 @@ async function onDisplayNotification(title, body, data) {
   const channelId = await notifee.createChannel({
     id: 'default',
     name: 'Default Channel',
+    importance: AndroidImportance.HIGH, // HIGH : Notification appears on-top, DEFAULT : Notification recieved, smallIcon appear in the top view, 
+    sound: 'default', // And this line if you want a sound
   });
 
   // Display a notification
@@ -160,3 +212,4 @@ async function onDisplayNotification(title, body, data) {
     },
   });
 }
+
